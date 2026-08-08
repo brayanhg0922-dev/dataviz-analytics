@@ -76,4 +76,4 @@ O sistema é 100% responsivo e otimizado para telas pequenas.
 
 ## 🔗 Link de Produção
 
-**[Clique aqui para acessar a versão online](https://dataviz-analytics.vercel.app)** *(substitua pelo seu link da Vercel após o deploy)*
+**[Clique aqui para acessar a versão online](npx plugins add vercel/vercel-plugin)**
