@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📊 DataViz Analytics - Sistema de Análise</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="header" id="mainHeader" style="display:none;">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📊</span>
+                    <div>
+                        <h1>DataViz Analytics</h1>
+                        <p>Inteligência de Dados para Fornecedores</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">👤</div>
+                        <div class="user-details">
+                            <span class="user-name" id="userName">Visitante</span>
+                            <span class="user-role" id="userRole">Administrador</span>
+                        </div>
+                        <button id="btnLogout" class="btn btn-logout">🚪 Sair</button>
+                    </div>
+                    <div class="header-stats" id="headerStats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalRegistros">0</span>
+                            <span class="stat-label">Registros</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalFornecedores">0</span>
+                            <span class="stat-label">Fornecedores</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalEconomia">R$ 0</span>
+                            <span class="stat-label">Economia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar" id="mainSidebar" style="display:none;">
+                <nav class="nav-menu">
+                    <div class="nav-item active" data-tab="dashboard">
+                        <span>🏠</span> Dashboard
+                    </div>
+                    <div class="nav-item" data-tab="upload">
+                        <span>📤</span> Upload
+                    </div>
+                    <div class="nav-item" data-tab="unificar">
+                        <span>🔗</span> Unificar
+                    </div>
+                    <div class="nav-item" data-tab="analise">
+                        <span>📊</span> Análise
+                    </div>
+                    <div class="nav-item" data-tab="graficos">
+                        <span>📈</span> Gráficos
+                    </div>
+                    <div class="nav-item" data-tab="relatorios">
+                        <span>📋</span> Relatórios
+                    </div>
+                    <div class="nav-item" data-tab="demoia">
+                        <span>🧠</span> Demo IA
+                    </div>
+                    <div class="nav-item" data-tab="configuracoes">
+                        <span>⚙️</span> Configurações
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- CONTEÚDO PRINCIPAL -->
+            <main class="content">
+                <!-- ============================================ -->
+                <!-- TELA DE LOGIN (FULL SCREEN) -->
+                <!-- ============================================ -->
+                <div class="login-wrapper" id="loginWrapper">
+                    <div class="login-container">
+                        <div class="login-brand">
+                            <div class="brand-icon">📊</div>
+                            <h1>DataViz Analytics</h1>
+                            <p>Plataforma de Inteligência de Dados</p>
+                        </div>
+                        <div class="login-box">
+                            <div class="login-header">
+                                <h2>🔐 Acesse sua conta</h2>
+                                <p>Entre com suas credenciais para continuar</p>
+                            </div>
+                            <div class="login-form">
+                                <div class="form-group">
+                                    <label>👤 Usuário</label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">👤</span>
+                                        <input type="text" id="loginUser" placeholder="Digite seu usuário" class="input-field">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>🔒 Senha</label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">🔑</span>
+                                        <input type="password" id="loginPass" placeholder="Digite sua senha" class="input-field">
+                                        <button class="toggle-password" onclick="togglePassword()">👁️</button>
+                                    </div>
+                                </div>
+                                <div class="login-options">
+                                    <label class="remember-me">
+                                        <input type="checkbox" id="rememberMe"> Lembrar-me
+                                    </label>
+                                    <a href="#" class="forgot-pass">Esqueceu a senha?</a>
+                                </div>
+                                <button id="btnLogin" class="btn btn-primary btn-login">🔓 Entrar</button>
+                                <div id="loginMessage" class="login-message"></div>
+                            </div>
+                            <div class="login-footer">
+                                <p>Credenciais de teste:</p>
+                                <div class="credenciais">
+                                    <span><strong>admin</strong> / admin123</span>
+                                    <span><strong>usuario</strong> / 123456</span>
+                                    <span><strong>teste</strong> / teste123</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: DASHBOARD -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabDashboard">
+                    <div class="card">
+                        <h2>🏠 Dashboard</h2>
+                        <div class="dashboard-grid">
+                            <div class="dashboard-card">
+                                <div class="card-icon">📊</div>
+                                <div class="card-info">
+                                    <span class="card-value" id="dashRegistros">0</span>
+                                    <span class="card-label">Total de Registros</span>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-icon">🏢</div>
+                                <div class="card-info">
+                                    <span class="card-value" id="dashFornecedores">0</span>
+                                    <span class="card-label">Fornecedores</span>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-icon">💰</div>
+                                <div class="card-info">
+                                    <span class="card-value" id="dashEconomia">R$ 0</span>
+                                    <span class="card-label">Economia Potencial</span>
+                                </div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="card-icon">📈</div>
+                                <div class="card-info">
+                                    <span class="card-value" id="dashProdutos">0</span>
+                                    <span class="card-label">Produtos em Comum</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>📊 Resumo Rápido</h2>
+                        <div class="resumo-grid">
+                            <div class="resumo-item">
+                                <span class="resumo-label">Melhor Fornecedor</span>
+                                <span class="resumo-value" id="dashMelhor">-</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Economia Média</span>
+                                <span class="resumo-value" id="dashMediaEconomia">R$ 0</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Produtos com Preço Menor</span>
+                                <span class="resumo-value" id="dashMenorPreco">0</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Data da Última Análise</span>
+                                <span class="resumo-value" id="dashUltimaAnalise">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>📈 Atividade Recente</h2>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <span class="activity-time">Agora</span>
+                                <span class="activity-text">Sistema iniciado. Aguardando dados...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: UPLOAD -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabUpload">
+                    <div class="card">
+                        <h2>📤 Upload de Planilhas</h2>
+                        <div class="upload-grid">
+                            <div class="upload-box">
+                                <label>🏢 Fornecedor 1</label>
+                                <input type="file" id="file1" accept=".xlsx,.xls,.csv">
+                                <div id="status1" class="file-status"></div>
+                            </div>
+                            <div class="upload-box">
+                                <label>🏭 Fornecedor 2</label>
+                                <input type="file" id="file2" accept=".xlsx,.xls,.csv">
+                                <div id="status2" class="file-status"></div>
+                            </div>
+                        </div>
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <label>🔑 Coluna de ID</label>
+                                <input type="text" id="colunaId" placeholder="Ex: ID, CODIGO, UPC" class="input-field">
+                            </div>
+                            <div class="config-item">
+                                <label>💰 Preço F1</label>
+                                <input type="text" id="preco1" placeholder="Ex: PRECO, VALOR" class="input-field">
+                            </div>
+                            <div class="config-item">
+                                <label>💰 Preço F2</label>
+                                <input type="text" id="preco2" placeholder="Ex: PRECO, VALOR" class="input-field">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button id="btnExemplo" class="btn btn-info">📌 Dados Exemplo</button>
+                            <button id="btnUnificar" class="btn btn-primary" disabled>🔗 Unificar <span style="background:#10B981;color:#000;border-radius:12px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px;">🧠 IA</span></button>
+                            <button id="btnLimpar" class="btn btn-danger">🗑️ Limpar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: UNIFICAR -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabUnificar">
+                    <div class="card">
+                        <h2>🔗 Unificação de Dados</h2>
+                        
+                        <div class="unify-status" id="unifyStatus">
+                            <div class="status-item">
+                                <span class="status-label">Status:</span>
+                                <span class="status-value" id="unifyStatusText">Aguardando dados</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Registros:</span>
+                                <span class="status-value" id="unifyCount">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Encontrados:</span>
+                                <span class="status-value" id="unifyFound">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Economia:</span>
+                                <span class="status-value" id="unifyEconomy">R$ 0,00</span>
+                            </div>
+                        </div>
+
+                        <div class="unify-preview" id="unifyPreview" style="display:none;">
+                            <div class="preview-controls">
+                                <h3>📋 Prévia dos Dados Unificados</h3>
+                                <div class="preview-search">
+                                    <input type="text" id="buscaPreview" class="input-field" placeholder="🔍 Buscar em qualquer campo..." oninput="mostrarPreviewUnificacao()" style="width:260px;">
+                                    <span id="previewContagem" class="preview-count"></span>
+                                </div>
+                            </div>
+                            <div class="table-wrapper" style="max-height:400px;">
+                                <table>
+                                    <thead id="unifyHead"></thead>
+                                    <tbody id="unifyBody"></tbody>
+                                </table>
+                            </div>
+                            <p class="preview-hint">💡 Clique duas vezes em um produto para ver todos os detalhes lado a lado</p>
+                        </div>
+
+                        <div class="unify-stats" id="unifyStats" style="display:none;">
+                            <h3>📊 Estatísticas</h3>
+                            <div class="stats-grid">
+                                <div class="stat-card"><span class="stat-number" id="statTotal">0</span><span class="stat-desc">Total</span></div>
+                                <div class="stat-card"><span class="stat-number" id="statComum">0</span><span class="stat-desc">Em Ambos</span></div>
+                                <div class="stat-card"><span class="stat-number" id="statF1">0</span><span class="stat-desc">Apenas F1</span></div>
+                                <div class="stat-card"><span class="stat-number" id="statF2">0</span><span class="stat-desc">Apenas F2</span></div>
+                                <div class="stat-card highlight"><span class="stat-number" id="statEconomia">R$ 0</span><span class="stat-desc">Economia</span></div>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <button id="btnProcessarUnificacao" class="btn btn-primary" disabled>🔄 Processar <span style="background:#10B981;color:#000;border-radius:12px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:6px;">🧠 IA</span></button>
+                            <button id="btnExportarUnificacao" class="btn btn-success" disabled>💾 Exportar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: DEMONSTRAÇÃO DA IA -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabDemoia">
+                    <div class="card">
+                        <h2>🧠 Demonstração da Inteligência Artificial</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                            O sistema utiliza o algoritmo de <strong>Fuzzy Matching (Distância de Levenshtein)</strong> 
+                            para correlacionar produtos mesmo quando os IDs são diferentes. 
+                            A IA calcula a similaridade entre os nomes/descrições e, se for <strong>≥ 75%</strong>, 
+                            considera um match.
+                        </p>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                            <div style="background: var(--bg-surface); padding: 16px; border-radius: 10px; border: 1px solid var(--border); text-align: center;">
+                                <div style="font-size: 32px;">🎯</div>
+                                <div style="font-size: 14px; font-weight: 600; margin-top: 8px;">Precisão da IA</div>
+                                <div style="font-size: 28px; font-weight: 700; color: var(--primary-light);" id="iaPrecisao">0%</div>
+                            </div>
+                            <div style="background: var(--bg-surface); padding: 16px; border-radius: 10px; border: 1px solid var(--border); text-align: center;">
+                                <div style="font-size: 32px;">🔗</div>
+                                <div style="font-size: 14px; font-weight: 600; margin-top: 8px;">Matches pela IA</div>
+                                <div style="font-size: 28px; font-weight: 700; color: var(--success);" id="iaMatches">0</div>
+                            </div>
+                            <div style="background: var(--bg-surface); padding: 16px; border-radius: 10px; border: 1px solid var(--border); text-align: center;">
+                                <div style="font-size: 32px;">📊</div>
+                                <div style="font-size: 14px; font-weight: 600; margin-top: 8px;">Similaridade Média</div>
+                                <div style="font-size: 28px; font-weight: 700; color: var(--warning);" id="iaSimilaridade">0%</div>
+                            </div>
+                        </div>
+
+                        <div id="iaMatchesList">
+                            <h3>📋 Produtos Casados pela IA</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                                Produtos que foram correlacionados pela IA mesmo com IDs diferentes.
+                            </p>
+                            <div class="table-wrapper" style="max-height: 300px;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="color: var(--primary-light);">Produto F1</th>
+                                            <th style="color: var(--success);">Produto F2</th>
+                                            <th style="color: var(--warning);">Similaridade</th>
+                                            <th style="color: var(--info);">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="iaMatchesBody">
+                                        <tr>
+                                            <td colspan="4" style="text-align: center; color: var(--text-muted);">
+                                                Nenhum match via IA ainda. Execute a unificação para ver os resultados.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 16px; background: rgba(124,58,237,0.08); padding: 16px; border-radius: 8px; border-left: 4px solid var(--primary);">
+                            <h4 style="color: var(--primary-light); margin-bottom: 8px;">💡 Como funciona?</h4>
+                            <ol style="color: var(--text-secondary); font-size: 13px; line-height: 1.8; padding-left: 20px;">
+                                <li><strong>1º Passe (Match Exato):</strong> O sistema tenta casar os produtos pelo ID.</li>
+                                <li><strong>2º Passe (IA):</strong> Se o ID não for encontrado, a IA calcula a similaridade dos nomes.</li>
+                                <li><strong>Threshold:</strong> Se a similaridade for ≥ 75%, os produtos são considerados um match.</li>
+                                <li><strong>Resultado:</strong> A IA aumenta a taxa de correlação em até 40%.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: ANÁLISE -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabAnalise">
+                    <div class="card">
+                        <h2>📊 Análise de Dados</h2>
+                        <div class="analise-grid">
+                            <div class="analise-card"><h3>📈 Distribuição de Preços</h3><div class="chart-container"><canvas id="chartPrecos"></canvas></div></div>
+                            <div class="analise-card"><h3>🥧 Comparação Fornecedores</h3><div class="chart-container"><canvas id="chartComparacao"></canvas></div></div>
+                            <div class="analise-card"><h3>📊 Diferença de Preços</h3><div class="chart-container"><canvas id="chartDiferenca"></canvas></div></div>
+                            <div class="analise-card"><h3>🏷️ Categorias</h3><div class="chart-container"><canvas id="chartCategorias"></canvas></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: GRÁFICOS AVANÇADOS -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabGraficos">
+                    <div class="card">
+                        <h2>📈 Gráficos Avançados</h2>
+                        <div class="graficos-grid">
+                            <div class="grafico-card"><h3>📊 Top Produtos</h3><div class="chart-container"><canvas id="chartTopProdutos"></canvas></div></div>
+                            <div class="grafico-card"><h3>📈 Tendência</h3><div class="chart-container"><canvas id="chartTendencia"></canvas></div></div>
+                            <div class="grafico-card full-width"><h3>📊 Matriz de Comparação</h3><div class="chart-container"><canvas id="chartMatriz"></canvas></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: RELATÓRIOS -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabRelatorios">
+                    <div class="card">
+                        <h2>📋 Relatórios Gerenciais</h2>
+                        <div class="relatorios-grid">
+                            <div class="relatorio-card" id="resumoExecutivo">
+                                <h3>📄 Resumo Executivo</h3>
+                                <div id="resumoContent"></div>
+                            </div>
+                            <div class="relatorio-card full-width">
+                                <h3>📊 Tabela de Dados</h3>
+                                <div class="table-wrapper">
+                                    <table id="tabelaRelatorio">
+                                        <thead id="relatorioHead"></thead>
+                                        <tbody id="relatorioBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button id="btnGerarRelatorio" class="btn btn-success" disabled>📄 Gerar</button>
+                            <button id="btnBaixarRelatorio" class="btn btn-primary" disabled>💾 Baixar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- TAB: CONFIGURAÇÕES -->
+                <!-- ============================================ -->
+                <div class="tab-content" id="tabConfiguracoes">
+                    <div class="card">
+                        <h2>⚙️ Configurações</h2>
+                        <div class="configuracoes-grid">
+                            <div class="config-card">
+                                <h3>👤 Perfil do Usuário</h3>
+                                <div class="perfil-info">
+                                    <div class="perfil-avatar">👤</div>
+                                    <div class="perfil-dados">
+                                        <p><strong>Nome:</strong> <span id="configNome">Usuário</span></p>
+                                        <p><strong>E-mail:</strong> <span id="configEmail">usuario@empresa.com</span></p>
+                                        <p><strong>Nível:</strong> <span id="configNivel">Administrador</span></p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" onclick="alert('Função em desenvolvimento')">✏️ Editar Perfil</button>
+                            </div>
+                            <div class="config-card">
+                                <h3>🔒 Segurança</h3>
+                                <div class="config-item">
+                                    <label>Senha Atual</label>
+                                    <input type="password" class="input-field" placeholder="********">
+                                </div>
+                                <div class="config-item">
+                                    <label>Nova Senha</label>
+                                    <input type="password" class="input-field" placeholder="Digite a nova senha">
+                                </div>
+                                <button class="btn btn-primary" onclick="alert('Função em desenvolvimento')">🔄 Alterar Senha</button>
+                            </div>
+                            <div class="config-card">
+                                <h3>📊 Preferências</h3>
+                                <div class="config-item">
+                                    <label>Formato de Data</label>
+                                    <select class="input-field">
+                                        <option>DD/MM/YYYY</option>
+                                        <option>MM/DD/YYYY</option>
+                                        <option>YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="config-item">
+                                    <label>Moeda Padrão</label>
+                                    <select class="input-field">
+                                        <option>BRL (R$)</option>
+                                        <option>USD ($)</option>
+                                        <option>EUR (€)</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success" onclick="alert('Preferências salvas!')">💾 Salvar Preferências</button>
+                            </div>
+                            <div class="config-card">
+                                <h3>📁 Importação</h3>
+                                <div class="config-item">
+                                    <label>Separador CSV</label>
+                                    <select class="input-field">
+                                        <option>Vírgula (,)</option>
+                                        <option>Ponto e vírgula (;)</option>
+                                        <option>Tab</option>
+                                    </select>
+                                </div>
+                                <div class="config-item">
+                                    <label>Codificação</label>
+                                    <select class="input-field">
+                                        <option>UTF-8</option>
+                                        <option>ISO-8859-1</option>
+                                        <option>Windows-1252</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-secondary" onclick="alert('Função em desenvolvimento')">📤 Exportar Configurações</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOGS -->
+                <div class="card">
+                    <h2>📋 Logs</h2>
+                    <div class="log-area" id="logArea">
+                        <div class="log-item info">🚀 Sistema iniciado. Faça login para continuar.</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL DETALHE PRODUTO -->
+    <div id="modalProduto" class="modal-overlay" style="display:none;" onclick="fecharModalSeFundo(event)">
+        <div class="modal-box">
+            <div class="modal-topo">
+                <span>🔍 Detalhes do Produto</span>
+                <button onclick="fecharModal()" class="btn-fechar">✕</button>
+            </div>
+            <div id="modalConteudo" class="modal-content-inner"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
