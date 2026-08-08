@@ -74,16 +74,6 @@ O sistema é 100% responsivo e otimizado para telas pequenas.
 
 ---
 
-## 👥 Equipe (Scrum)
-
-| Papel | Membro |
-| :--- | :--- |
-| Product Owner | Aluno 1 |
-| Scrum Master | Aluno 2 |
-| Dev Team | Aluno 3 e Aluno 4 |
-
----
-
 ## 🔗 Link de Produção
 
 **[Clique aqui para acessar a versão online](https://dataviz-analytics.vercel.app)** *(substitua pelo seu link da Vercel após o deploy)*
